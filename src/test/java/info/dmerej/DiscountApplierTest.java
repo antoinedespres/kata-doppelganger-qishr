@@ -41,7 +41,15 @@ public class DiscountApplierTest {
 
   @Test
   void should_notify_twice_when_applying_discount_for_two_users_v2() {
-    // TODO: write a test to demonstrate the bug in DiscountApplier.applyV2()
+    SpyNotifier notifier = new SpyNotifier();
+    DiscountApplier discountApplier = new DiscountApplier(notifier);
+    User user1 = new User("michel", "michel@efrei.net");
+    User user2 = new User("bastien", "bastien@efrei.net");
+    List<User> users = List.of(user1, user2);
+
+    discountApplier.applyV2(10, users);
+
+    assertEquals(users, notifier.getNotifications().stream().map(Notification::user).toList());
   }
 
 }
