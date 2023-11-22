@@ -43,6 +43,13 @@ public class MailSenderTest {
 
     @Test
     void should_retry_when_getting_a_503_error() {
-        // TODO: write a test to demonstrate the bug in MailSender.sendV2()
+        User user = new User("michel", "michel@efrei.net");
+        MockHttpClient mockHttpClient = new MockHttpClient(503);
+        MailSender mailSender = new MailSender(mockHttpClient);
+        SendMailRequest sendMailRequest = new SendMailRequest("michel@efrei.net","New notification","message1");
+
+        mailSender.sendV2(user,"message1");
+
+        assertEquals(sendMailRequest, mockHttpClient.getSendMailRequest());
     }
 }
