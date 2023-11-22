@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="java-doppelganger" />
         <module name="teaching" />
+        <module name="doppelganger" />
       </profile>
     </annotationProcessing>
   </component>
