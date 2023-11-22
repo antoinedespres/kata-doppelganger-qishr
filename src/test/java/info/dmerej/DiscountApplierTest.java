@@ -2,13 +2,13 @@ package info.dmerej;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 record Notification(User user, String message) {}
 
@@ -69,7 +69,23 @@ public class DiscountApplierTest {
 
   @Test
   void should_notify_twice_when_applying_discount_for_two_users_v2_mockito() {
+    List<User> list = new ArrayList<User>();
+    List<User> spyList = spy(list);
 
+    User user1 = new User("michel", "michel@efrei.net");
+    User user2 = new User("bastien", "bastien@efrei.net");
+
+    Notifier notifier = Mockito.mock(Notifier.class);
+    doAnswer(invocationOnMock -> {
+      spyList.add(invocationOnMock.getArgument(0));
+      return null;
+    }).when(notifier).notify(any(User.class),any(String.class));
+    List<User> users = List.of(user1, user2);
+    DiscountApplier discountApplier = new DiscountApplier(notifier);
+
+    discountApplier.applyV2(10, List.of(user1, user2));
+
+    assertEquals(users, spyList);
   }
 
 }
